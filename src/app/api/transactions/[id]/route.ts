@@ -2,11 +2,8 @@ import { NextResponse,NextRequest } from 'next/server';
 import connectToDatabase from '@/lib/mongo';
 import Transaction from '@/models/Transaction';
 
-export async function PUT(
-    request: NextRequest,
-    { params }: { params: Record<string,string>}
-  ): Promise<NextResponse> {
-    // Cast params.id to string (it may be a string | string[] by default)
+export async function PUT(request: NextRequest, context: unknown): Promise<NextResponse> {
+    const { params } = context as { params: { id: string } };
     const id = params.id;
     const data = await request.json();
     try {
