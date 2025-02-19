@@ -67,7 +67,7 @@ export default function TransactionForm({ onSubmit, initialData = {} as Transact
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 w-full text-black"
         >
           <option value="Uncategorized">Uncategorized</option>
           <option value="Food">Food</option>

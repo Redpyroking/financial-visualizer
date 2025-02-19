@@ -41,6 +41,7 @@ export default function BudgetsPage() {
     fetchTransactions();
   }, []);
 
+  // Handle budget form submission
   const handleBudgetSubmit = async (data: BudgetData) => {
     await fetch('/api/budgets', {
       method: 'POST',
@@ -50,24 +51,28 @@ export default function BudgetsPage() {
     fetchBudgets();
   };
 
-  // Calculate actuals for the current month
+  // Calculate actual spending for the current month
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
-  const actuals = transactions.filter((tx) => {
-    const date = new Date(tx.date);
-    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-  }).reduce((acc, tx) => {
-    acc[tx.category] = (acc[tx.category] || 0) + tx.amount;
-    return acc;
-  }, {} as Record<string, number>);
+  const actuals = transactions
+    .filter((tx) => {
+      const date = new Date(tx.date);
+      return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    })
+    .reduce((acc, tx) => {
+      acc[tx.category] = (acc[tx.category] || 0) + tx.amount;
+      return acc;
+    }, {} as Record<string, number>);
 
+  // Prepare data for the comparison chart
   const chartData = budgets.map((budget) => ({
     category: budget.category,
     budget: budget.budget,
-    actual: actuals[budget.category] || 0
+    actual: actuals[budget.category] || 0,
   }));
 
+  // Generate spending insights
   const insights: string[] = [];
   for (const cat in actuals) {
     const budgetItem = budgets.find((b) => b.category === cat);
