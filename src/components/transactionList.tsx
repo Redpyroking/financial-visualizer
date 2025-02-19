@@ -1,9 +1,17 @@
 'use client';
 import React from 'react';
 
+interface Transaction {
+  _id?: string;
+  amount: number;
+  date: string;
+  description: string;
+  category: string;
+}
+
 interface TransactionListProps {
-  transactions: any[];
-  onEdit: (tx: any) => void;
+  transactions: Transaction[];
+  onEdit: (tx: Transaction) => void;
   onDelete: (id: string) => void;
 }
 
@@ -28,7 +36,7 @@ export default function TransactionList({ transactions, onEdit, onDelete }: Tran
             <td className="border p-2">{tx.category}</td>
             <td className="border p-2">
               <button onClick={() => onEdit(tx)} className="mr-2 text-blue-600">Edit</button>
-              <button onClick={() => onDelete(tx._id)} className="text-red-600">Delete</button>
+              <button onClick={() => onDelete(tx._id as string)} className="text-red-600">Delete</button>
             </td>
           </tr>
         ))}
