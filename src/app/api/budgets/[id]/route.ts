@@ -1,17 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextResponse,NextRequest } from 'next/server';
+import { ParsedUrlQuery } from 'querystring';
 import connectToDatabase from '@/lib/mongo';
 import Budget from '@/models/Budget';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  await connectToDatabase();
-  const data = await request.json();
-  try {
-    const budget = await Budget.findByIdAndUpdate(params.id, data, { new: true });
-    return NextResponse.json(budget);
-  } catch  {
-    return NextResponse.json({ error: 'Error updating budget' }, { status: 500 });
+export async function PUT(
+    request: NextRequest,
+    { params }: { params: ParsedUrlQuery }
+  ): Promise<NextResponse> {
+    // Cast params.id to string (it may be a string | string[] by default)
+    const id = params.id as string;
+    const data = await request.json();
+    try {
+      const budget = await Budget.findByIdAndUpdate(id, data, { new: true });
+      return NextResponse.json(budget);
+    } catch {
+      return NextResponse.json({ error: 'Error updating budget' }, { status: 500 });
+    }
   }
-}
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   await connectToDatabase();
