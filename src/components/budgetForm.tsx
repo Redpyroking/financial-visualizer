@@ -30,7 +30,7 @@ export default function BudgetForm({ onSubmit }: BudgetFormProps) {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="border rounded px-2 py-1 w-full"
+          className="border rounded px-2 py-1 w-full text-black"
         >
           <option value="Food">Food</option>
           <option value="Utilities">Utilities</option>
