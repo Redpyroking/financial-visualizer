@@ -26,27 +26,27 @@ body {
   padding: 0;
 }
 
-/* Ensure that any editable element has black text */
+/* Ensure any editable element has black text */
 input,
 textarea,
 [contenteditable="true"] {
   color: var(--editable-text);
 }
 
-/* Container styling for main content */
+/* Container styling */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
 }
 
-/* Card styling for content sections */
+/* Card styling */
 .card {
   background: var(--background);
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Navigation bar styling */
@@ -55,7 +55,7 @@ textarea,
   align-items: center;
   justify-content: space-between;
   background: var(--foreground);
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 
 .navbar a {
@@ -63,9 +63,13 @@ textarea,
   text-decoration: none;
   margin-right: 1rem;
   font-weight: 600;
+  transition: color 0.2s;
 }
 
-/* Optional: Hover effects for navigation links */
 .navbar a:hover {
-  text-decoration: underline;
+  color: #d1d5db; /* light gray on hover */
+}
+
+h2, h3 {
+  color: var(--foreground);
 }
