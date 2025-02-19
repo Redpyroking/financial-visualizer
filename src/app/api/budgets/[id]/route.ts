@@ -13,13 +13,13 @@ export async function PUT(request: NextRequest, context: unknown): Promise<NextR
       return NextResponse.json({ error: 'Error updating budget' }, { status: 500 });
     }
   }
-  
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  await connectToDatabase();
+
+export async function DELETE(request: NextRequest, context: unknown): Promise<NextResponse> {
+  const { params } = context as { params: { id: string } };
   try {
     await Budget.findByIdAndDelete(params.id);
     return NextResponse.json({ message: 'Budget deleted' });
-  } catch  {
+  } catch {
     return NextResponse.json({ error: 'Error deleting budget' }, { status: 500 });
   }
 }
