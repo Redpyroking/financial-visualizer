@@ -14,7 +14,7 @@ export default function RootLayout({
       <body className="antialiased">
         <nav className="navbar">
           <div className="flex items-center space-x-4">
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/">Dashboard</Link>
             <Link href="/transactions">Transactions</Link>
             <Link href="/budgets">Budgets</Link>
           </div>
