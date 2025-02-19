@@ -8,7 +8,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   try {
     const budget = await Budget.findByIdAndUpdate(params.id, data, { new: true });
     return NextResponse.json(budget);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Error updating budget' }, { status: 500 });
   }
 }
@@ -18,7 +18,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   try {
     await Budget.findByIdAndDelete(params.id);
     return NextResponse.json({ message: 'Budget deleted' });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Error deleting budget' }, { status: 500 });
   }
 }
