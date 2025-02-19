@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export interface BudgetData {
   category: string;
@@ -10,13 +10,24 @@ export interface BudgetData {
 
 interface BudgetFormProps {
   onSubmit: (data: BudgetData) => void;
+  initialData?: BudgetData;
+  onCancel?: () => void;
 }
 
-export default function BudgetForm({ onSubmit }: BudgetFormProps) {
-  const [category, setCategory] = useState('Food');
-  const [month, setMonth] = useState(new Date().getMonth() + 1); // months 1-12
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [budget, setBudget] = useState(0);
+export default function BudgetForm({ onSubmit, initialData, onCancel }: BudgetFormProps) {
+  const [category, setCategory] = useState(initialData?.category || 'Food');
+  const [month, setMonth] = useState(initialData?.month || new Date().getMonth() + 1);
+  const [year, setYear] = useState(initialData?.year || new Date().getFullYear());
+  const [budget, setBudget] = useState(initialData?.budget || 0);
+
+  useEffect(() => {
+    if (initialData) {
+      setCategory(initialData.category);
+      setMonth(initialData.month);
+      setYear(initialData.year);
+      setBudget(initialData.budget);
+    }
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,9 +79,16 @@ export default function BudgetForm({ onSubmit }: BudgetFormProps) {
           className="border rounded px-2 py-1 w-full"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Set Budget
-      </button>
+      <div className="flex space-x-2">
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          {initialData ? 'Update Budget' : 'Set Budget'}
+        </button>
+        {onCancel && (
+          <button type="button" onClick={onCancel} className="bg-gray-300 text-black px-4 py-2 rounded">
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
