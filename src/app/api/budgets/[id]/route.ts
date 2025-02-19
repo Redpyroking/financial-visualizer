@@ -4,7 +4,7 @@ import Budget from '@/models/Budget';
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: {id:string} }
+    { params }: { params: Record<string,string>}
   ): Promise<NextResponse> {
     // Cast params.id to string (it may be a string | string[] by default)
     const id = params.id;
