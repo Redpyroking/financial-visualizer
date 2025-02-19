@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
+// Define the interface for budget data
 export interface BudgetData {
   category: string;
   month: number;
@@ -8,18 +9,25 @@ export interface BudgetData {
   budget: number;
 }
 
+// Extend BudgetData to include the MongoDB _id field
+interface Budget extends BudgetData {
+  _id: string;
+}
+
+// BudgetForm component for creating or editing a budget
 interface BudgetFormProps {
   onSubmit: (data: BudgetData) => void;
   initialData?: BudgetData;
   onCancel?: () => void;
 }
 
-export default function BudgetForm({ onSubmit, initialData, onCancel }: BudgetFormProps) {
+function BudgetForm({ onSubmit, initialData, onCancel }: BudgetFormProps) {
   const [category, setCategory] = useState(initialData?.category || 'Food');
   const [month, setMonth] = useState(initialData?.month || new Date().getMonth() + 1);
   const [year, setYear] = useState(initialData?.year || new Date().getFullYear());
   const [budget, setBudget] = useState(initialData?.budget || 0);
 
+  // Update state if initialData changes (for editing)
   useEffect(() => {
     if (initialData) {
       setCategory(initialData.category);
@@ -90,5 +98,90 @@ export default function BudgetForm({ onSubmit, initialData, onCancel }: BudgetFo
         )}
       </div>
     </form>
+  );
+}
+
+// Main BudgetsPage component with list, edit, and delete functionality
+export default function BudgetsPage() {
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
+
+  // Fetch budgets from API
+  const fetchBudgets = async () => {
+    const res = await fetch('/api/budgets');
+    const data = await res.json();
+    setBudgets(data);
+  };
+
+  useEffect(() => {
+    fetchBudgets();
+  }, []);
+
+  // Handle form submission for creating or updating a budget
+  const handleBudgetSubmit = async (data: BudgetData) => {
+    if (editingBudget) {
+      // Update existing budget
+      await fetch(`/api/budgets/${editingBudget._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      setEditingBudget(null);
+    } else {
+      // Create new budget
+      await fetch('/api/budgets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    }
+    fetchBudgets();
+  };
+
+  // Handle deletion of a budget
+  const handleDelete = async (id: string) => {
+    await fetch(`/api/budgets/${id}`, { method: 'DELETE' });
+    fetchBudgets();
+  };
+
+  return (
+    <div className="p-8">
+      <h2 className="text-3xl font-bold mb-6">Budgeting</h2>
+      {/* Budget Form */}
+      <div className="mb-8">
+        <BudgetForm
+          onSubmit={handleBudgetSubmit}
+          initialData={editingBudget || undefined}
+          onCancel={() => setEditingBudget(null)}
+        />
+      </div>
+      {/* List of Budgets with Edit/Delete */}
+      <div>
+        {budgets.map((budget) => (
+          <div key={budget._id} className="flex justify-between items-center border-b py-2">
+            <div>
+              <p className="font-semibold">{budget.category}</p>
+              <p>
+                {budget.month}/{budget.year} - ${budget.budget}
+              </p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setEditingBudget(budget)}
+                className="bg-yellow-500 text-white px-3 py-1 rounded"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(budget._id)}
+                className="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
