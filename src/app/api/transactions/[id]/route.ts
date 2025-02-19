@@ -8,7 +8,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   try {
     const transaction = await Transaction.findByIdAndUpdate(params.id, data, { new: true });
     return NextResponse.json(transaction);
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ error: 'Error updating transaction' }, { status: 500 });
   }
 }
@@ -18,7 +18,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   try {
     await Transaction.findByIdAndDelete(params.id);
     return NextResponse.json({ message: 'Transaction deleted' });
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ error: 'Error deleting transaction' }, { status: 500 });
   }
 }
