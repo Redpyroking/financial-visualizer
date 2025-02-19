@@ -15,7 +15,8 @@ export async function PUT(request: NextRequest, context: unknown): Promise<NextR
   }
 
 export async function DELETE(request: NextRequest, context: unknown): Promise<NextResponse> {
-  const { params } = context as { params: { id: string } };
+    await connectToDatabase();
+    const { params } = context as { params: { id: string } };
   try {
     await Budget.findByIdAndDelete(params.id);
     return NextResponse.json({ message: 'Budget deleted' });
