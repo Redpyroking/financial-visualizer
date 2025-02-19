@@ -1,14 +1,13 @@
 import { NextResponse,NextRequest } from 'next/server';
-import { ParsedUrlQuery } from 'querystring';
 import connectToDatabase from '@/lib/mongo';
 import Budget from '@/models/Budget';
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: ParsedUrlQuery }
+    { params }: { params: {id:string} }
   ): Promise<NextResponse> {
     // Cast params.id to string (it may be a string | string[] by default)
-    const id = params.id as string;
+    const id = params.id;
     const data = await request.json();
     try {
       const budget = await Budget.findByIdAndUpdate(id, data, { new: true });

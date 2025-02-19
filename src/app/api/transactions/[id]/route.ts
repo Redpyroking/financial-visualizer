@@ -1,14 +1,13 @@
 import { NextResponse,NextRequest } from 'next/server';
 import connectToDatabase from '@/lib/mongo';
 import Transaction from '@/models/Transaction';
-import { ParsedUrlQuery } from 'querystring';
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: ParsedUrlQuery }
+    { params }: { params: {id:string}}
   ): Promise<NextResponse> {
     // Cast params.id to string (it may be a string | string[] by default)
-    const id = params.id as string;
+    const id = params.id;
     const data = await request.json();
     try {
       const transaction = await Transaction.findByIdAndUpdate(id, data, { new: true });
