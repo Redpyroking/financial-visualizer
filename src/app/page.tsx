@@ -4,8 +4,16 @@ import DashboardCard from '@/components/dashboardCard';
 import TransactionList from '@/components/transactionList';
 import CategoryPieChart from '@/components/categoryPieChart';
 
+interface Transaction {
+  _id?: string;
+  amount: number;
+  date: string;
+  description: string;
+  category: string;
+}
+
 export default function DashboardPage() {
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const fetchTransactions = async () => {
     const res = await fetch('/api/transactions');

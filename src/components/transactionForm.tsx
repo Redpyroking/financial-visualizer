@@ -1,12 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 
+interface Transaction {
+    _id?: string;
+    amount: number;
+    date: string;
+    description: string;
+    category: string;
+  }
+
 interface TransactionFormProps {
-  onSubmit: (data: any) => void;
-  initialData?: any;
+  onSubmit: (data: Transaction) => void;
+  initialData?: Transaction;
 }
 
-export default function TransactionForm({ onSubmit, initialData = {} }: TransactionFormProps) {
+export default function TransactionForm({ onSubmit, initialData = {} as Transaction }: TransactionFormProps) {
   const [amount, setAmount] = useState(initialData.amount || '');
   const [date, setDate] = useState(
     initialData.date ? new Date(initialData.date).toISOString().slice(0, 10) : ''
@@ -20,7 +28,7 @@ export default function TransactionForm({ onSubmit, initialData = {} }: Transact
       alert('Amount and Date are required');
       return;
     }
-    onSubmit({ amount: Number(amount), date: new Date(date), description, category });
+    onSubmit({ amount: Number(amount), date, description, category });
   };
 
   return (

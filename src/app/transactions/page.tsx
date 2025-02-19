@@ -4,9 +4,17 @@ import TransactionList from '@/components/transactionList';
 import TransactionForm from '@/components/transactionForm';
 import MonthlyExpensesChart from '@/components/monthlyExpensesChart';
 
+interface Transaction {
+    _id?: string;
+    amount: number;
+    date: string;
+    description: string;
+    category: string;
+  }
+
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState<any[]>([]);
-  const [editingTransaction, setEditingTransaction] = useState<any | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction| null>(null);
 
   const fetchTransactions = async () => {
     const res = await fetch('/api/transactions');
@@ -18,7 +26,7 @@ export default function TransactionsPage() {
     fetchTransactions();
   }, []);
 
-  const handleAdd = async (transaction: any) => {
+  const handleAdd = async (transaction: Transaction) => {
     await fetch('/api/transactions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,12 +35,12 @@ export default function TransactionsPage() {
     fetchTransactions();
   };
 
-  const handleEdit = (transaction: any) => {
+  const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
   };
 
-  const handleUpdate = async (transaction: any) => {
-    await fetch(`/api/transactions/${editingTransaction._id}`, {
+  const handleUpdate = async (transaction: Transaction) => {
+    await fetch(`/api/transactions/${editingTransaction?._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(transaction)

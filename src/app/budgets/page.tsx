@@ -3,19 +3,35 @@ import React, { useState, useEffect } from 'react';
 import BudgetComparisonChart from '@/components/budgetComparison';
 import SpendingInsights from '@/components/spendingInsight';
 
+interface Budget {
+  _id?: string;
+  category: string;
+  month: number;
+  year: number;
+  budget: number;
+}
+
+interface Transaction {
+  _id?: string;
+  amount: number;
+  date: string; // or Date if you plan to convert it later
+  description: string;
+  category: string;
+}
+
 export default function BudgetsPage() {
-  const [budgets, setBudgets] = useState<any[]>([]);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const fetchBudgets = async () => {
     const res = await fetch('/api/budgets');
-    const data = await res.json();
+    const data: Budget[] = await res.json();
     setBudgets(data);
   };
 
   const fetchTransactions = async () => {
     const res = await fetch('/api/transactions');
-    const data = await res.json();
+    const data: Transaction[] = await res.json();
     setTransactions(data);
   };
 
@@ -24,6 +40,7 @@ export default function BudgetsPage() {
     fetchTransactions();
   }, []);
 
+  // Filter transactions for the current month
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
@@ -38,7 +55,7 @@ export default function BudgetsPage() {
   const chartData = budgets.map(budget => ({
     category: budget.category,
     budget: budget.budget,
-    actual: actuals[budget.category] || 0
+    actual: actuals[budget.category] || 0,
   }));
 
   // Generate simple spending insights
