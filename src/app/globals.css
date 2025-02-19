@@ -1,3 +1,5 @@
+/* stylelint-disable at-rule-no-unknown */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +7,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --editable-text: #000000; /* force editable text to black */
 }
 
+/* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -18,4 +22,50 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure that any editable element has black text */
+input,
+textarea,
+[contenteditable="true"] {
+  color: var(--editable-text);
+}
+
+/* Container styling for main content */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Card styling for content sections */
+.card {
+  background: var(--background);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation bar styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--foreground);
+  padding: 1rem;
+}
+
+.navbar a {
+  color: var(--background);
+  text-decoration: none;
+  margin-right: 1rem;
+  font-weight: 600;
+}
+
+/* Optional: Hover effects for navigation links */
+.navbar a:hover {
+  text-decoration: underline;
 }
